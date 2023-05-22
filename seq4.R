@@ -35,6 +35,7 @@ naissances %>%
 toto %>% select(agemere, tagemere)
 toto %>% count(tagemere)
 
+# is.na -------------------------------------------------------------------------
 
 is.na(c("Marie","Yves",NA,"Jeanne"))
 
@@ -42,8 +43,8 @@ naissances %>%
   mutate(sexe = ifelse(sexe == '1',"garçon","fille")) %>% 
   filter(is.na(sexe))
 
-
-
+enquete <- rio::import(file.path(chemin, "enquete.RDS"))
+enquete %>% filter(is.na(Sexe))
 
 
 
