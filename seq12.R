@@ -25,6 +25,10 @@ a %>%
   mutate(part_femmes = round(Femme / total * 100, 1)) %>%
   arrange(desc(part_femmes))
 
+a %>% 
+  pivot_wider(names_from = "Sexe", values_from = "n")
+
+
 # Exercice --------------------------------------------------------------------
 
 chemin_poplegale <- file.path(chemin, "poplegale_6815b.sas7bdat")
