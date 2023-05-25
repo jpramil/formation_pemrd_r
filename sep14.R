@@ -31,15 +31,22 @@ serie_d_emploi %>%
 covid <- rio::import(file.path(chemin,"covid-hospit-2023-01-24-19h03.csv"))
 covid <- as_tibble(covid)
 
-covid %>%
+dta <- covid %>%
   filter(sexe == 0) %>%
   mutate(jour = as.Date(jour)) %>% 
   group_by(dep, jour) %>% 
   summarise(hosp = sum(hosp)) %>% # année déjà triée 
-  mutate(evol = hosp - lag(hosp)) %>% 
-  mutate(annee = lubridate::year(jour)) 
+  # mutate(evol = hosp - lag(hosp)) %>% 
+  ungroup() %>% 
+  mutate(annee = lubridate::year(jour),
+         mois = lubridate::month(jour,label = T),
+         day = lubridate::day(jour))
 
-
+install.packages("ggformula")
+library(ggformula)
+dta %>%
+  filter(dep == "35") %>% 
+  ggformula::gf_line(hosp ~ jour_mois, color = ~ as.character(annee))
 
 
 
