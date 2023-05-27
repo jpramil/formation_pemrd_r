@@ -36,17 +36,25 @@ dta <- covid %>%
   mutate(jour = as.Date(jour)) %>% 
   group_by(dep, jour) %>% 
   summarise(hosp = sum(hosp)) %>% # année déjà triée 
-  # mutate(evol = hosp - lag(hosp)) %>% 
   ungroup() %>% 
-  mutate(annee = lubridate::year(jour),
-         mois = lubridate::month(jour,label = T),
-         day = lubridate::day(jour))
+  mutate(annee = year(jour))
+
+dta <- dta %>%
+  mutate(
+    jour_modif = case_when(
+      jour %>% str_detect("^2020") ~ jour + years(1),
+      jour %>% str_detect("^2022") ~ jour - years(1),
+      jour %>% str_detect("^2023") ~ jour - years(2),
+      T ~ jour
+    )
+  )
 
 install.packages("ggformula")
 library(ggformula)
+
 dta %>%
   filter(dep == "35") %>% 
-  ggformula::gf_line(hosp ~ jour_mois, color = ~ as.character(annee))
+  ggformula::gf_line(hosp ~ jour_modif, color = ~ as.character(annee))
 
 
 
