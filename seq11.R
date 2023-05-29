@@ -14,6 +14,10 @@ dbListTables(base)
 
 dbGetQuery(base, "SELECT schema_name FROM information_schema.schemata")
 
+requete<-"SELECT schema_name FROM information_schema.schemata"
+
+resultat_requete<-dbGetQuery(base, requete)
+
 dbGetQuery(base,
 "SELECT table_name
 FROM information_schema.tables
