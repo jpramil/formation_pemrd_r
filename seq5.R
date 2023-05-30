@@ -16,7 +16,7 @@ naissances %>%
 
 # group_by et filter
 
-p <- import("V:/PALETTES/IGoR/data/poplegale_6815d.RDS")
+p <- rio::import(file.path(chemin,"poplegale_6815d.RDS"))
 p %>%
   group_by(d) %>%
   filter( PMUN15==max(PMUN15) )

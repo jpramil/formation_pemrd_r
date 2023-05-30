@@ -66,6 +66,3 @@ summarise_at(pops,vars(matches("^PMUN")),list(Minimum=min,Maximum=max))
 filter_at(pops,vars(matches("^PMUN")),any_vars(.>80000))
 
 filter_if(pops,is.numeric,all_vars(.>80000))
-
-# Exercices --------------------------------
-
