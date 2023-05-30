@@ -108,7 +108,7 @@ graphique_22_covid<-covid_22%>%
     title="Évolution des hospitalisations du Covid-19 au cours du temps dans les Côtes d'Armor",
     caption="Source: DATA.GOUV",
     x="Date",
-    y="Hsopitalisation cas Covid-19"
+    y="Hospitalisation cas Covid-19"
   )%>%
   gf_refine(
     scale_x_date(breaks="3 month", date_labels = "%b %Y")
