@@ -81,3 +81,48 @@ str(df)
 
 Map(graphique_covid,c("971","972","973"))
 
+
+## Suite diapo ----
+
+`%not in%`<- Negate(`%in%`)
+liste <- 1:5
+6 %not in% liste
+
+moyenne <- function(var){
+  naissances %>%
+  mutate(x=as.integer(var)) %>%
+  summarise(mean(x))
+}
+
+moyenne(agemere)
+
+install.packages("gtools")
+library(gtools)
+
+moyenne <- defmacro(VAR,
+                    expr=naissances %>%
+                      mutate(x=as.integer(VAR)) %>%
+                      summarise(mean(x))
+)
+
+moyenne(agemere)
+
+moyenne <- function(var){
+  eval(parse(text=
+               paste0("naissances %>% mutate(x=as.integer(",
+                      var,
+                      ")) %>% summarise(mean(x))")
+  ))
+}
+moyenne("agemere")
+
+
+library(glue)
+
+moyenne <- function(VAR){
+  eval(parse(text=
+               glue("naissances %>% mutate(x=as.integer({VAR})) %>% summarise(mean(x))")
+  ))
+}
+
+moyenne("agemere")
