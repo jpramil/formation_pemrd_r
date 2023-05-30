@@ -145,9 +145,41 @@ g3 <- mtcars %>% gf_point(wt ~ mpg)
 
 ## Exercice récapitulatif ----
 
+library(lubridate)
+library(zoo)
+
 serie_emploi <- rio::import(file.path(chemin,"Serie_d_emploi.RDS"))
 serie_emploi <- as_tibble(serie_emploi)
 
 head(serie_emploi)
 
+table_dep<- arrow::read_parquet(file.path(chemin,"dep2014.parquet"))
+table_reg<- arrow::read_parquet(file.path(chemin,"reg2014.parquet"))
 
+serie_emploi_2<-serie_emploi%>%
+  mutate(DEP=gsub(" ","",substr(Dept,1,3)))%>%
+  left_join(.,select(table_dep,DEP,REGION),by='DEP')%>%
+  left_join(.,select(table_reg,REGION,NCC),by='REGION')%>%
+  mutate(trimestre=as.yearqtr(as.Date(Date_string)))
+
+table_graphique<-serie_emploi_2%>%
+  group_by(REGION,NCC,trimestre)%>%
+  summarise(somme_effectif=sum(Effectif))%>%
+  arrange(REGION,NCC,trimestre)%>%
+  mutate(indicatrice_effectif=100*somme_effectif/somme_effectif[1])
+
+table_graphique%>%
+  gf_line(indicatrice_effectif~trimestre,colour=~NCC)%>%
+  gf_refine(
+    scale_x_yearqtr(breaks = seq(from = sort(unique(table_graphique$trimestre))[2], 
+                                 to = max(unique(table_graphique$trimestre)), 
+                                 by = 0.5),
+                    format = "%Y T%q")
+  )%>%
+  gf_labs(
+    title="Évolution relative de l'emploi par région (2014)",
+    caption="Source: Formation",
+    x="Trimestre",
+    y="Effectif base 100 au T4 2010"
+  )%>%
+  gf_theme(legend.position = "bottom")
