@@ -24,7 +24,7 @@ p %>%
 # group_by et mutate
 
 p %>% group_by(d) %>%
-  mutate (PMUN15max=max(PMUN15,na.rm=TRUE))
+  mutate(PMUN15tot=sum(PMUN15,na.rm=TRUE))
 
 # Trier : arrange
 
@@ -52,23 +52,23 @@ naissances %>%
 
 # Exercices ---------------------------------------------------
 
-
 naissances %>%
+  group_by(depnais)%>%
+  summarise(nombre_naissance=n(),age_moyen_mere=mean(as.numeric(agemere)))%>%
+  head(5) # 5 premiers résultats
+
+ naissances %>% 
   group_by(depnais) %>% summarise(n=n()) %>%
   filter(n==max(n))
-
-naissances %>% 
-  group_by(depnais,comnais) %>% summarise(n=n()) %>%
-  filter(n==max(n))
-
-naissances %>% mutate(j=case_when(jsemaine=="lundi"    ~ 1,
-                                      jsemaine=="mardi"    ~ 2,
-                                      jsemaine=="mercredi" ~ 3,
-                                      jsemaine=="jeudi"    ~ 4,
-                                      jsemaine=="vendredi" ~ 5,
-                                      jsemaine=="samedi"   ~ 6,
-                                      jsemaine=="dimanche" ~ 7)) %>%
-  group_by(j,jsemaine) %>% summarise(n=n())
-
+ 
+naissances %>%
+  group_by(depnais) %>%
+  mutate(nombre_naissance_dep=n())%>%
+  group_by(depnais,sexe,nombre_naissance_dep)%>%
+  summarise(nombre_naissance_sexe=n())%>%
+  mutate(ratio=nombre_naissance_sexe/nombre_naissance_dep)%>%
+  ungroup()%>% # faire le test sans cette ligne pour montrer importance d'enlever le group_by
+  filter(ratio==max(ratio))
+ 
 
 

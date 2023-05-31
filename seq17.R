@@ -81,7 +81,6 @@ str(df)
 
 Map(graphique_covid,c("971","972","973"))
 
-
 ## Suite diapo ----
 
 `%not in%`<- Negate(`%in%`)
