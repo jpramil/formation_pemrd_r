@@ -16,8 +16,10 @@ pops
 # Sélectionner des colonnes Les fonctions select
 
 select(pops,PSDC99,DC)
-
+pops
 select(pops,-PSDC99,-PSDC90,-PSDC82,-PSDC75,-PSDC68)
+
+select_if(pops,DC,is.numeric)
 
 select(pops,DC,matches("^PSDC"))
 
@@ -66,3 +68,9 @@ summarise_at(pops,vars(matches("^PMUN")),list(Minimum=min,Maximum=max))
 filter_at(pops,vars(matches("^PMUN")),any_vars(.>80000))
 
 filter_if(pops,is.numeric,all_vars(.>80000))
+
+
+naissances %>%
+  select(agemere) %>%
+  mutate(agemere2 = cut(as.numeric(agemere),c(-Inf,15,20,25,35,45,Inf)))%>%
+  count(agemere2)

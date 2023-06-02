@@ -36,6 +36,8 @@ crossing(superheros2,editeurs) %>% View()
 
 chemin <- "https://minio.lab.sspcloud.fr/jpramil/formation_pemrdr"
 chemin_cc <- file.path(chemin, "base_cc_comparateur.xlsx")
+
+# Importation d'un xlsx
 base_cc <- rio::import(chemin_cc, skip = 5, sheet = "COM")
 
 chemin_reg <- file.path(chemin, "reg2014.dbf")
@@ -63,7 +65,8 @@ semi <- recap_cc %>%
 
 reg_persist <- semi$REG
 
-tab_anciennes_reg <- full %>% filter(!REG %in% c(reg_persist,nouvelles_reg))
+tab_anciennes_reg <- full %>% 
+  filter(!REG %in% c(reg_persist,nouvelles_reg))
 
 
 
